@@ -1,61 +1,60 @@
 import C from "./constants";
-import { allSkiDays } from "./store/reducers";
+import appReducer from "./store/reducers";
+import initialState from "./initialState.json";
 
-const state = [
-  {
-    resort: "Kirkwood",
-    date: "2020-12-15",
-    powder: true,
-    backcountry: false,
-  },
-  {
-    resort: "Boreal",
-    date: "2020-12-16",
-    powder: false,
-    backcountry: false,
-  },
-];
-
-// ACTION type: C.ADD_DAY,
-/*const action = {
-  type: C.ADD_DAY,
-  payload: {
-    resort: "Boreal",
-    date: "2020-12-16",
-    powder: false,
-    backcountry: false,
-  },
-};*/
-
-// ACTION type: C.ADD_DAY,
-const action = {
-  type: C.REMOVE_DAY,
-  payload: {
-    date: "2020-12-16",
-  },
-};
-
-const nextState = allSkiDays(state, action);
+let state = initialState;
 
 console.log(`
-    initial state: ${JSON.stringify(state)}
-    action: ${JSON.stringify(action)}
-    new state: ${JSON.stringify(nextState)}
+Initial State
+=======================
+goal: ${state.goal}
+resorts: ${JSON.stringify(state.allSkiDays)}
+fetching: ${state.resortNames.fetching}
+suggestions: ${state.resortNames.suggestions}
 `);
 
-/* 
-   ***********
-   ADD_DAY
-   *********** 
-    initial state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false}]
-    action: {"type":"ADD_DAY","payload":{"resort":"Boreal","date":"2020-12-16","powder":false,"backcountry":false}}
-    new state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false},{"resort":"Boreal","date":"2020-12-16","powder":false,"backcountry":false}]
+state = appReducer(state, {
+  type: C.SET_GOAL,
+  payload: 2,
+});
 
-   ***********
-   REMOVE_DAY
-   *********** 
-    initial state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false},{"resort":"Boreal","date":"2020-12-16","powder":false,"backcountry":false}]
-    action: {"type":"REMOVE_DAY","payload":{"date":"2020-12-16"}}
-    new state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false}]
+state = appReducer(state, {
+  type: C.ADD_DAY,
+  payload: {
+    resort: "Mt Shasta",
+    date: "2016-10-28",
+    powder: false,
+    backcountry: true,
+  },
+});
 
+state = appReducer(state, {
+  type: C.CHANGE_SUGGESTIONS,
+  payload: ["Mt Tallac", "Mt Hood", "Mt Shasta"],
+});
+
+console.log(`
+Next State
+=======================
+goal: ${state.goal}
+resorts: ${JSON.stringify(state.allSkiDays)}
+fetching: ${state.resortNames.fetching}
+suggestions: ${state.resortNames.suggestions}
+`);
+
+/*
+Initial State
+=======================
+goal: 10
+resorts: [{"resort":"Kirkwood","date":"2016-12-7","powder":true,"backcountry":false},{"resort":"Squaw Valley","date":"2016-12-8","powder":false,"backcountry":false},{"resort":"Mt Tallac","date":"2016-12-9","powder":false,"backcountry":true}]
+fetching: false
+suggestions: Squaw Valley,Snowbird,Stowe,Steamboat
+
+
+Next State
+=======================
+goal: 2
+resorts: [{"resort":"Kirkwood","date":"2016-12-7","powder":true,"backcountry":false},{"resort":"Squaw Valley","date":"2016-12-8","powder":false,"backcountry":false},{"resort":"Mt Tallac","date":"2016-12-9","powder":false,"backcountry":true},{"resort":"Mt Shasta","date":"2016-10-28","powder":false,"backcountry":true}]
+fetching: false
+suggestions: Mt Tallac,Mt Hood,Mt Shasta
 */
