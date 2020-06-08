@@ -1,45 +1,61 @@
 import C from "./constants";
-import { errors } from "./store/reducers";
+import { allSkiDays } from "./store/reducers";
 
-const state = ["user not authorized", "server feed not found"];
+const state = [
+  {
+    resort: "Kirkwood",
+    date: "2020-12-15",
+    powder: true,
+    backcountry: false,
+  },
+  {
+    resort: "Boreal",
+    date: "2020-12-16",
+    powder: false,
+    backcountry: false,
+  },
+];
 
-// action send object
-const action_add = {
-  type: C.ADD_ERROR,
-  payload: "cannot connect to server",
-};
+// ACTION type: C.ADD_DAY,
+/*const action = {
+  type: C.ADD_DAY,
+  payload: {
+    resort: "Boreal",
+    date: "2020-12-16",
+    powder: false,
+    backcountry: false,
+  },
+};*/
 
-// action send object
+// ACTION type: C.ADD_DAY,
 const action = {
-  type: C.CLEAR_ERROR,
-  payload: 0,
+  type: C.REMOVE_DAY,
+  payload: {
+    date: "2020-12-16",
+  },
 };
 
-// use reductor for change state
-// value state is NOT equal than action
-const nextState = errors(state, action);
+const nextState = allSkiDays(state, action);
 
 console.log(`
-
-    initial state: ${state}
+    initial state: ${JSON.stringify(state)}
     action: ${JSON.stringify(action)}
     new state: ${JSON.stringify(nextState)}
-
 `);
 
 /* 
    ***********
-   ADD_ERROR
+   ADD_DAY
    *********** 
-   initial state: user not authorized,server feed not found
-   action: {"type":"ADD_ERROR","payload":"cannot connect to server"}
-   new state: ["user not authorized","server feed not found","cannot connect to server"]
+    initial state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false}]
+    action: {"type":"ADD_DAY","payload":{"resort":"Boreal","date":"2020-12-16","powder":false,"backcountry":false}}
+    new state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false},{"resort":"Boreal","date":"2020-12-16","powder":false,"backcountry":false}]
 
    ***********
-   CLEAR_ERROR
+   REMOVE_DAY
    *********** 
-   initial state: user not authorized,server feed not found
-   action: {"type":"CLEAR_ERROR","payload":0}
-   new state: ["server feed not found"]
+    initial state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false},{"resort":"Boreal","date":"2020-12-16","powder":false,"backcountry":false}]
+    action: {"type":"REMOVE_DAY","payload":{"date":"2020-12-16"}}
+    new state: [{"resort":"Kirkwood","date":"2020-12-15","powder":true,"backcountry":false}]
 
 */
